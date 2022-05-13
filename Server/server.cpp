@@ -6,7 +6,7 @@ using namespace std;
 #include <winsock2.h>
 #include <string.h>
 #include <time.h>
-#include "Request.cpp"
+#include "HandleRequest.cpp"
 
 struct SocketState
 {
@@ -291,17 +291,25 @@ void receiveMessage(int index)
 		if (sockets[index].len > 0)
 		{
 			Request* request = Request::Parse(sockets[index].buffer);
+			char* response;
 			
 			if (!request) {
 				cout << "Request not good";
 				return;
 			}
 
+			response = HandleRequest(request);
+			sockets[index].send = SEND;
+			sockets[index].sendSubType = SEND_TIME;
+			memcpy(sockets[index].buffer, response, strlen(response));
+			sockets[index].len = strlen(response);
+			return;
+
 			if (strncmp(sockets[index].buffer, "TimeString", 10) == 0)
 			{
 				sockets[index].send = SEND;
 				sockets[index].sendSubType = SEND_TIME;
-				memcpy(sockets[index].buffer, &sockets[index].buffer[10], sockets[index].len - 10);
+				memcpy(sockets[index].buffer, response, strlen(response));
 				sockets[index].len -= 10;
 				return;
 			}
