@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include "StrUtil.cpp"
+#include "StrUtilNetwork.cpp"
 
 class Headers
 {
@@ -45,10 +45,10 @@ public:
 	}
 
 	static void insertFields(Headers* headers, char* field, char* value) {
-		if (strcmp(field, "host")) {
+		if (!strcmp(field, "host")) {
 			strcpy(headers->m_Host, value);
 		}
-		else if (strcmp(field, "lang")) {
+		else if (!strcmp(field, "lang")) {
 			strcpy(headers->m_Lang, value);
 		}
 	}

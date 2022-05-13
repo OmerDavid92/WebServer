@@ -30,7 +30,7 @@ static int getWord(char* src, char* word, char delimiter) {
 	int currentIndex = 0;
 	char currentChar = src[currentIndex];
 
-	while (currentChar != delimiter || currentChar != '\0') {
+	while (currentChar != delimiter && currentChar != '\0') {
 		currentIndex++;
 		currentChar = src[currentIndex];
 	}
