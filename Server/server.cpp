@@ -291,6 +291,12 @@ void receiveMessage(int index)
 		if (sockets[index].len > 0)
 		{
 			Request* request = Request::Parse(sockets[index].buffer);
+			
+			if (!request) {
+				cout << "Request not good";
+				return;
+			}
+
 			if (strncmp(sockets[index].buffer, "TimeString", 10) == 0)
 			{
 				sockets[index].send = SEND;

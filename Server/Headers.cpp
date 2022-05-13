@@ -5,7 +5,7 @@ class Headers
 {
 public:
 	char m_Host[255] = { 0 };
-	char m_Lang[3] = { 0 };
+	char m_Lang[3] = "he";
 	
 	Headers() {};
 
