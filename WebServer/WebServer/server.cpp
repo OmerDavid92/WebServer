@@ -1,10 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <iostream>
 using namespace std;
 #pragma comment(lib, "Ws2_32.lib")
 #include <winsock2.h>
 #include <string.h>
 #include <time.h>
+#include "Request.cpp"
 
 struct SocketState
 {
@@ -16,7 +18,7 @@ struct SocketState
 	int len;
 };
 
-const int TIME_PORT = 27015;
+const int TIME_PORT = 8080;
 const int MAX_SOCKETS = 60;
 const int EMPTY = 0;
 const int LISTEN = 1;
@@ -288,6 +290,7 @@ void receiveMessage(int index)
 
 		if (sockets[index].len > 0)
 		{
+			Request* request = Request::Parse(sockets[index].buffer);
 			if (strncmp(sockets[index].buffer, "TimeString", 10) == 0)
 			{
 				sockets[index].send = SEND;
@@ -340,7 +343,7 @@ void sendMessage(int index)
 		time_t timer;
 		time(&timer);
 		// Convert the number to string.
-		itoa((int)timer, sendBuff, 10);
+		_itoa((int)timer, sendBuff, 10);
 	}
 
 	bytesSent = send(msgSocket, sendBuff, (int)strlen(sendBuff), 0);

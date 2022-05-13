@@ -21,5 +21,11 @@
     <ClCompile Include="Headers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Request.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StrUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

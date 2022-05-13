@@ -1,36 +1,55 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include "StrUtil.cpp"
+
 class Headers
 {
 public:
-	char m_Host[255];
-	char m_Lang[3];
+	char m_Host[255] = { 0 };
+	char m_Lang[3] = { 0 };
 	
+	Headers() {};
 
+	static Headers* Parse(char i_Headers[255]) {
+		Headers* headers = new Headers();
+		char row[255] = { '\0' };
+		int currentIndex = 0;
 
-	Headers();
-	~Headers();
-	static Headers Parse(char i_Headers[255]) {
-		char header[255];
-		for (int i = 0; i < 255 && i_Headers[i]!='\n'; i++) {
-			if (i_Headers[i] != '\n' && i_Headers[i] != ':') {
-				header[i] = i_Headers[i];
-			}
+		currentIndex += getRow(i_Headers + currentIndex, row);
 
+		while (strcmp(row, "\0")) {
+			ParseField(headers, row);
+			currentIndex += getRow(i_Headers + currentIndex, row);
 		}
 
-
+		return headers;
 	}
 
+	static void ParseField(Headers* headers, char* row) {
+		int currentIndex = 0;
+		char field[255] = { '\0' };
+		char value[255] = { '\0' };
 
-private:
+		currentIndex += getWord(row + currentIndex, field, ':');
 
+		if (!strlen(field)) {
+			return;
+		}
+
+		currentIndex += getWord(row + currentIndex + 1, value, '\r');
+
+		if (!strlen(value)) {
+			return;
+		}
+
+		insertFields(headers, field, value);
+	}
+
+	static void insertFields(Headers* headers, char* field, char* value) {
+		if (strcmp(field, "host")) {
+			strcpy(headers->m_Host, value);
+		}
+		else if (strcmp(field, "lang")) {
+			strcpy(headers->m_Lang, value);
+		}
+	}
 };
-
-Headers::Headers()
-{
-
-}
-
-Headers::~Headers()
-{
-
-}

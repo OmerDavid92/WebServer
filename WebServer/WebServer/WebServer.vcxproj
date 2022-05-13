@@ -140,7 +140,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Headers.cpp" />
+    <ClCompile Include="Request.cpp" />
     <ClCompile Include="server.cpp" />
+    <ClCompile Include="StrUtil.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
