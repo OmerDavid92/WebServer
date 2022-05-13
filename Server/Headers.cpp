@@ -45,10 +45,10 @@ public:
 	}
 
 	static void insertFields(Headers* headers, char* field, char* value) {
-		if (!strcmp(field, "host")) {
+		if (!strcmp(field, "Host")) {
 			strcpy(headers->m_Host, value);
 		}
-		else if (!strcmp(field, "lang")) {
+		else if (!strcmp(field, "Lang")) {
 			strcpy(headers->m_Lang, value);
 		}
 	}

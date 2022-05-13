@@ -44,6 +44,8 @@ public:
 		strcpyByIndexes(i_Request, headersStr, headersIndexStart, headersIndexEnd);
 		request->m_Headers = Headers::Parse(headersStr);
 		strcpyByIndexes(i_Request, body, currentIndex, strlen(i_Request));
+		
+		return request;
 	}
 	
 	static Request* ParsefirstRow(char* row) {
