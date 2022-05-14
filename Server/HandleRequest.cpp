@@ -1,5 +1,6 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
+#define MAX_BUFEER 2000
 #include <fstream>
 #include <string>
 #include "Request.cpp"
@@ -8,7 +9,7 @@
 static Response* HandleGet(Request* i_Request) {
 	Response* response = nullptr;
 	Headers* headers = nullptr;
-	char path[500] = "./Pages/";
+	char path[MAX_BUFEER] = "./Pages/";
 	int bodyLength = 0;
 	string lengthStr;
 	
@@ -27,10 +28,10 @@ static Response* HandleGet(Request* i_Request) {
 	}
 
 	headers = new Headers();
-	strcpy(headers->m_Conntent_Language, i_Request->m_Lang);
-	strcpy(headers->m_Conntent_Type, "txt");
+	strcpy(headers->m_Content_Language, i_Request->m_Lang);
+	strcpy(headers->m_Content_Type, "txt/html; charset=UTF-8");
 	lengthStr = to_string(bodyLength);
-	strcpy(headers->m_Conntent_Length, lengthStr.c_str());
+	strcpy(headers->m_Content_Length, lengthStr.c_str());
 	response->m_Headers = headers;
 
 	return response;

@@ -1,5 +1,6 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
+#define MAX_BUFEER 2000
 #include <iostream>
 #include <string.h>
 #include "Headers.cpp"
@@ -9,20 +10,20 @@ class Response
 {
 public:
 	char m_StatusCode[10] = { 0 };
-	char m_StatusWord[500] = { 0 };
+	char m_StatusWord[MAX_BUFEER] = { 0 };
 	char m_Version[10] = { 0 };
 	Headers* m_Headers = nullptr;
-	char m_Body[500] = { 0 };
+	char m_Body[MAX_BUFEER] = { 0 };
 
-	Response(const char statusCode[10], const char statusWord[500], const char version[10]) {
+	Response(const char statusCode[10], const char statusWord[MAX_BUFEER], const char version[10]) {
 		strcpy(m_StatusCode, statusCode);
 		strcpy(m_StatusWord, statusWord);
 		strcpy(m_Version, version);
 	};
 
 	char* ToString() {
-		char headers[500] = { '\0' };
-		char returnResponse[500] = { '\0' };
+		char headers[MAX_BUFEER] = { '\0' };
+		char returnResponse[MAX_BUFEER] = { '\0' };
 		string response;
 
 		response.append(m_Version);

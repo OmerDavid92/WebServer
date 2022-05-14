@@ -1,5 +1,6 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
+#define MAX_BUFEER 2000
 #include <iostream>
 #include <string.h>
 #include "StrUtilNetwork.cpp"
@@ -9,15 +10,15 @@ class Headers
 {
 public:
 	char m_Host[100] = { 0 };
-	char m_Conntent_Type[100] = { 0 };
-	char m_Conntent_Length[100] = { 0 };
-	char m_Conntent_Language[100] = { 0 };
+	char m_Content_Type[100] = { 0 };
+	char m_Content_Length[100] = { 0 };
+	char m_Content_Language[100] = { 0 };
 	
 	Headers() {};
 
-	static Headers* Parse(char i_Headers[500]) {
+	static Headers* Parse(char i_Headers[MAX_BUFEER]) {
 		Headers* headers = new Headers();
-		char row[500] = { '\0' };
+		char row[MAX_BUFEER] = { '\0' };
 		int currentIndex = 0;
 
 		currentIndex += getRow(i_Headers + currentIndex, row);
@@ -32,8 +33,8 @@ public:
 
 	static void ParseField(Headers* headers, char* row) {
 		int currentIndex = 0;
-		char field[500] = { '\0' };
-		char value[500] = { '\0' };
+		char field[MAX_BUFEER] = { '\0' };
+		char value[MAX_BUFEER] = { '\0' };
 
 		currentIndex += getWord(row + currentIndex, field, ':');
 
@@ -57,24 +58,24 @@ public:
 	}
 
 	char* ToString() {
-		char returnHeaders[500] = { '\0' };
+		char returnHeaders[MAX_BUFEER] = { '\0' };
 		string headers;
 
-		if (m_Conntent_Type && strlen(m_Conntent_Type)) {
+		if (m_Content_Type && strlen(m_Content_Type)) {
 			headers.append("Content-Type: ");
-			headers.append(m_Conntent_Type);
+			headers.append(m_Content_Type);
 			headers.append("\r\n");
 		}
 
-		if (m_Conntent_Length && strlen(m_Conntent_Length)) {
+		if (m_Content_Length && strlen(m_Content_Length)) {
 			headers.append("Content-Length: ");
-			headers.append(m_Conntent_Length);
+			headers.append(m_Content_Length);
 			headers.append("\r\n");
 		}
 
-		if (m_Conntent_Language && strlen(m_Conntent_Language)) {
+		if (m_Content_Language && strlen(m_Content_Language)) {
 			headers.append("Content-Language: ");
-			headers.append(m_Conntent_Language);
+			headers.append(m_Content_Language);
 			headers.append("\r\n");
 		}
 

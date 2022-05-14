@@ -1,5 +1,6 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
+#define MAX_BUFEER 2000
 #include <string.h>
 
 static void strcpyByIndexes(char* src, char* dest, int start, int end) {
@@ -10,7 +11,7 @@ static void strcpyByIndexes(char* src, char* dest, int start, int end) {
 }
 
 static int getRow(char* src, char* row) {
-	char currentIndex = 0;
+	int currentIndex = 0;
 	char currentChar = src[currentIndex];
 
 	while (currentChar != '\r' && currentChar != '\0') {

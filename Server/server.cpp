@@ -1,6 +1,7 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define MAX_BUFEER 2000
 #include <iostream>
 using namespace std;
 #pragma comment(lib, "Ws2_32.lib")
@@ -15,12 +16,12 @@ struct SocketState
 	int	recv;			// Receiving?
 	int	send;			// Sending?
 	Request* request = nullptr;	// Sending sub-type
-	char buffer[500];
+	char buffer[MAX_BUFEER];
 	int len;
 };
 
 const int TIME_PORT = 8080;
-const int MAX_SOCKETS = 3;
+const int MAX_SOCKETS = 60;
 const int EMPTY = 0;
 const int LISTEN = 1;
 const int RECEIVE = 2;
@@ -290,9 +291,9 @@ void receiveMessage(int index)
 		if (sockets[index].len > 0)
 		{
 			int indexOfEndFirstRequest = getEndIndexOfFirstRequest(sockets[index].buffer);
-			char firstRequest[500] = { '\0' };
+			char firstRequest[MAX_BUFEER] = { '\0' };
 			memcpy(firstRequest, sockets[index].buffer, indexOfEndFirstRequest);
-			memcpy(sockets[index].buffer, &sockets[index].buffer[indexOfEndFirstRequest], sockets[index].len - indexOfEndFirstRequest);
+			memcpy(sockets[index].buffer, &sockets[index].buffer[indexOfEndFirstRequest + 1], indexOfEndFirstRequest + 1);
 			sockets[index].len -= indexOfEndFirstRequest;
 			sockets[index].send = SEND;
 
@@ -309,7 +310,7 @@ void receiveMessage(int index)
 void sendMessage(int index)
 {
 	int bytesSent = 0;
-	char sendBuff[500];
+	char sendBuff[MAX_BUFEER];
 
 	SOCKET msgSocket = sockets[index].id;
 
