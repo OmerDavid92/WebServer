@@ -1,3 +1,4 @@
+#pragma once
 #define _CRT_SECURE_NO_WARNINGS
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <iostream>
@@ -13,20 +14,18 @@ struct SocketState
 	SOCKET id;			// Socket handle
 	int	recv;			// Receiving?
 	int	send;			// Sending?
-	int sendSubType;	// Sending sub-type
-	char buffer[128];
+	Request* request = nullptr;	// Sending sub-type
+	char buffer[500];
 	int len;
 };
 
 const int TIME_PORT = 8080;
-const int MAX_SOCKETS = 60;
+const int MAX_SOCKETS = 3;
 const int EMPTY = 0;
 const int LISTEN = 1;
 const int RECEIVE = 2;
 const int IDLE = 3;
 const int SEND = 4;
-const int SEND_TIME = 1;
-const int SEND_SECONDS = 2;
 
 bool addSocket(SOCKET id, int what);
 void removeSocket(int index);
@@ -290,75 +289,32 @@ void receiveMessage(int index)
 
 		if (sockets[index].len > 0)
 		{
-			Request* request = Request::Parse(sockets[index].buffer);
-			char* response;
-			
-			if (!request) {
-				cout << "Request not good";
-				return;
-			}
-
-			response = HandleRequest(request);
+			int indexOfEndFirstRequest = getEndIndexOfFirstRequest(sockets[index].buffer);
+			char firstRequest[500] = { '\0' };
+			memcpy(firstRequest, sockets[index].buffer, indexOfEndFirstRequest);
+			memcpy(sockets[index].buffer, &sockets[index].buffer[indexOfEndFirstRequest], sockets[index].len - indexOfEndFirstRequest);
+			sockets[index].len -= indexOfEndFirstRequest;
 			sockets[index].send = SEND;
-			sockets[index].sendSubType = SEND_TIME;
-			memcpy(sockets[index].buffer, response, strlen(response));
-			sockets[index].len = strlen(response);
-			return;
+			sockets[index].recv = EMPTY;
 
-			if (strncmp(sockets[index].buffer, "TimeString", 10) == 0)
-			{
-				sockets[index].send = SEND;
-				sockets[index].sendSubType = SEND_TIME;
-				memcpy(sockets[index].buffer, response, strlen(response));
-				sockets[index].len -= 10;
-				return;
-			}
-			else if (strncmp(sockets[index].buffer, "SecondsSince1970", 16) == 0)
-			{
-				sockets[index].send = SEND;
-				sockets[index].sendSubType = SEND_SECONDS;
-				memcpy(sockets[index].buffer, &sockets[index].buffer[16], sockets[index].len - 16);
-				sockets[index].len -= 16;
-				return;
-			}
-			else if (strncmp(sockets[index].buffer, "Exit", 4) == 0)
-			{
-				closesocket(msgSocket);
-				removeSocket(index);
-				return;
+			sockets[index].request = Request::Parse(firstRequest);
+
+			if (!sockets[index].request) {
+				cout << "Request not good - Abandoned";
+				sockets[index].send = IDLE;
 			}
 		}
 	}
-
 }
 
 void sendMessage(int index)
 {
 	int bytesSent = 0;
-	char sendBuff[255];
+	char sendBuff[500];
 
 	SOCKET msgSocket = sockets[index].id;
-	if (sockets[index].sendSubType == SEND_TIME)
-	{
-		// Answer client's request by the current time string.
 
-		// Get the current time.
-		time_t timer;
-		time(&timer);
-		// Parse the current time to printable string.
-		strcpy(sendBuff, ctime(&timer));
-		sendBuff[strlen(sendBuff) - 1] = 0; //to remove the new-line from the created string
-	}
-	else if (sockets[index].sendSubType == SEND_SECONDS)
-	{
-		// Answer client's request by the current time in seconds.
-
-		// Get the current time.
-		time_t timer;
-		time(&timer);
-		// Convert the number to string.
-		_itoa((int)timer, sendBuff, 10);
-	}
+	strcpy(sendBuff, HandleRequest(sockets[index].request));
 
 	bytesSent = send(msgSocket, sendBuff, (int)strlen(sendBuff), 0);
 	if (SOCKET_ERROR == bytesSent)

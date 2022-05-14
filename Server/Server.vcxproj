@@ -142,6 +142,7 @@
     <ClCompile Include="HandleRequest.cpp" />
     <ClCompile Include="Headers.cpp" />
     <ClCompile Include="Request.cpp" />
+    <ClCompile Include="Response.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="StrUtilNetwork.cpp" />
   </ItemGroup>

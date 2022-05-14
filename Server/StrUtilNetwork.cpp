@@ -1,3 +1,4 @@
+#pragma once
 #define _CRT_SECURE_NO_WARNINGS
 #include <string.h>
 
@@ -42,4 +43,22 @@ static int getWord(char* src, char* word, char delimiter) {
 	}
 
 	return currentIndex;
+}
+
+static int getEndIndexOfFirstRequest(char* requests) {
+	int currentIndex = 1;
+
+	while (requests[currentIndex] != '\0'
+		&& strncmp(requests + currentIndex, "GET", 3) != 0
+		&& strncmp(requests + currentIndex, "POST", 4) != 0
+		&& strncmp(requests + currentIndex, "PUT", 3) != 0
+		&& strncmp(requests + currentIndex, "DELETE", 6) != 0
+		&& strncmp(requests + currentIndex, "HEAD", 4) != 0
+		&& strncmp(requests + currentIndex, "OPTIONS", 7) != 0
+		&& strncmp(requests + currentIndex, "TRACE", 5) != 0)
+	{
+		currentIndex++;
+	}
+
+	return currentIndex - 1;
 }
