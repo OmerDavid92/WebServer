@@ -295,7 +295,6 @@ void receiveMessage(int index)
 			memcpy(sockets[index].buffer, &sockets[index].buffer[indexOfEndFirstRequest], sockets[index].len - indexOfEndFirstRequest);
 			sockets[index].len -= indexOfEndFirstRequest;
 			sockets[index].send = SEND;
-			sockets[index].recv = EMPTY;
 
 			sockets[index].request = Request::Parse(firstRequest);
 
