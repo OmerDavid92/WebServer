@@ -5,7 +5,6 @@ class Headers
 {
 public:
 	char m_Host[255] = { 0 };
-	char m_Lang[3] = "en";
 	
 	Headers() {};
 
@@ -47,9 +46,6 @@ public:
 	static void insertFields(Headers* headers, char* field, char* value) {
 		if (!strcmp(field, "Host")) {
 			strcpy(headers->m_Host, value);
-		}
-		else if (!strcmp(field, "Lang")) {
-			strcpy(headers->m_Lang, value);
 		}
 	}
 };

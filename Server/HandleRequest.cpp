@@ -8,7 +8,7 @@ static char* HandleGet(Request* i_Request) {
 	char currentChar = '\0';
 	int currentIndex = 0;
 
-	strcat(path, i_Request->m_Headers->m_Lang);
+	strcat(path, i_Request->m_Lang);
 	strcat(path, i_Request->m_URI);
 
 	ifstream file(path);

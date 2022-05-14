@@ -9,6 +9,7 @@ public:
 	char m_Method[10] = { 0 };
 	char m_URI[255] = { 0 };
 	char m_Version[10] = { 0 };
+	char m_Lang[3] = "he";
 	Headers* m_Headers = nullptr;
 	char m_Body[255] = { 0 };
 
@@ -49,32 +50,70 @@ public:
 	}
 	
 	static Request* ParsefirstRow(char* row) {
-		int currentIndex = 0;
+		Request* request = nullptr;
+		int firstLineCurrentIndex = 0;
+		int uriAndQueryCurrentIndex = 0;
 		char method[255] = { '\0' };
+		char uriAndQuery[255] = { '\0' };
 		char uri[255] = { '\0' };
 		char version[255] = { '\0' };
+		char query[255] = { '\0' };
 
-		currentIndex += getWord(row + currentIndex, method, ' ');
+		firstLineCurrentIndex += getWord(row + firstLineCurrentIndex, method, ' ');
 		
 		if (!strlen(method)) {
 			cout << "shity c++";
-			return nullptr;
+			return request;
 		}
 
-		currentIndex += getWord(row + currentIndex, uri, ' ');
+		firstLineCurrentIndex += getWord(row + firstLineCurrentIndex, uriAndQuery, ' ');
+		uriAndQueryCurrentIndex += getWord(uriAndQuery + uriAndQueryCurrentIndex, uri, '?');
 
 		if (!strlen(uri)) {
 			cout << "shity c++";
-			return nullptr;
+			return request;
 		}
 
-		currentIndex += getWord(row + currentIndex, version, ' ');
+		firstLineCurrentIndex += getWord(row + firstLineCurrentIndex, version, ' ');
 
 		if (!strlen(version)) {
 			cout << "shity c++";
-			return nullptr;
+			return request;
 		}
 
-		return new Request(method, uri, version);
+		request = new Request(method, uri, version);
+		uriAndQueryCurrentIndex += getWord(uriAndQuery + uriAndQueryCurrentIndex, query, ' ');
+
+		if (strlen(query)) {
+			ParseQueryString(request, query);
+		}
+
+		return request;
+	}
+
+	static void ParseQueryString(Request* request, char* row) {
+		int currentIndex = 0;
+		char field[255] = { '\0' };
+		char value[255] = { '\0' };
+
+		currentIndex += getWord(row + currentIndex, field, '=');
+
+		if (!strlen(field)) {
+			return;
+		}
+
+		currentIndex += getWord(row + currentIndex, value, '&');
+
+		if (!strlen(value)) {
+			return;
+		}
+
+		insertFields(request, field, value);
+	}
+
+	static void insertFields(Request* request, char* field, char* value) {
+		if (!strcmp(field, "lang")) {
+			strcpy(request->m_Lang, value);
+		}
 	}
 };
