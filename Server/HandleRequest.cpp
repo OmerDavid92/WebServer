@@ -37,12 +37,24 @@ static Response* HandleGet(Request* i_Request) {
 	return response;
 }
 
+static Response* HandleHead(Request* i_Request) {
+	Response* response = nullptr;
+
+	response = HandleGet(i_Request);
+
+	if (strlen(response->m_Body)) {
+		response->m_Body[0] = '\0';
+	}
+
+	return response;
+}
+
 static char* HandleRequest(Request* i_Request) {
-	Response* reaponse = nullptr;
+	Response* response = nullptr;
 	char* serverOutput = nullptr;
 	
 	if (!strcmp(i_Request->m_Method, "GET")) {
-		reaponse = HandleGet(i_Request);
+		response = HandleGet(i_Request);
 	}
 	else if (!strcmp(i_Request->m_Method, "POST")) {
 		//serverOutput = HandlePost(i_Request);
@@ -55,7 +67,7 @@ static char* HandleRequest(Request* i_Request) {
 		//
 	}
 	else if (!strcmp(i_Request->m_Method, "HEAD")) {
-		//
+		response = HandleHead(i_Request);
 	}
 	else if (!strcmp(i_Request->m_Method, "OPTIONS")) {
 		//
@@ -64,7 +76,7 @@ static char* HandleRequest(Request* i_Request) {
 		//
 	}
 
-	if (reaponse) {
+	if (response) {
 		serverOutput = reaponse->ToString();
 	}
 
