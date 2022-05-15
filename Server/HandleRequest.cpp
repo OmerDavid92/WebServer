@@ -49,6 +49,24 @@ static Response* HandleHead(Request* i_Request) {
 	return response;
 }
 
+static Response* HandlePost(Request* i_Request) {
+	Response* response = nullptr;
+	Headers* headers = nullptr;
+
+	response = new Response("200", "OK", i_Request->m_Version);
+	strcpy(response->m_Body, "POST worked!");
+	headers = new Headers();
+	strcpy(headers->m_Content_Language, i_Request->m_Lang);
+	strcpy(headers->m_Content_Type, "txt/html; charset=UTF-8");
+	strcpy(headers->m_Content_Length, "12");
+	response->m_Headers = headers;
+
+	cout << "The POST request body was:" << endl;
+	cout << i_Request->m_Body << endl;
+
+	return response;
+}
+
 static char* HandleRequest(Request* i_Request) {
 	Response* response = nullptr;
 	char* serverOutput = nullptr;
@@ -57,7 +75,7 @@ static char* HandleRequest(Request* i_Request) {
 		response = HandleGet(i_Request);
 	}
 	else if (!strcmp(i_Request->m_Method, "POST")) {
-		//serverOutput = HandlePost(i_Request);
+		response = HandlePost(i_Request);
 	}
 	else if (!strcmp(i_Request->m_Method, "PUT")) {
 		//serverOutput = HandlePut(i_Request);
