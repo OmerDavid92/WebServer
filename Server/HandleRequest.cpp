@@ -77,7 +77,7 @@ static char* HandleRequest(Request* i_Request) {
 	}
 
 	if (response) {
-		serverOutput = reaponse->ToString();
+		serverOutput = response->ToString();
 	}
 
 	return serverOutput;
