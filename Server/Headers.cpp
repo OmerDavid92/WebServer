@@ -10,6 +10,8 @@ class Headers
 {
 public:
 	char m_Host[100] = { 0 };
+	char m_Allow[200] = { 0 };
+	char m_Connection[100] = { 0 };
 	char m_Content_Type[100] = { 0 };
 	char m_Content_Length[100] = { 0 };
 	char m_Content_Language[100] = { 0 };
@@ -60,6 +62,18 @@ public:
 	char* ToString() {
 		char returnHeaders[MAX_BUFEER] = { '\0' };
 		string headers;
+
+		if (m_Connection && strlen(m_Connection)) {
+			headers.append("Connection: ");
+			headers.append(m_Connection);
+			headers.append("\r\n");
+		}
+
+		if (m_Allow && strlen(m_Allow)) {
+			headers.append("Allow: ");
+			headers.append(m_Allow);
+			headers.append("\r\n");
+		}
 
 		if (m_Content_Type && strlen(m_Content_Type)) {
 			headers.append("Content-Type: ");

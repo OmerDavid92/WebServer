@@ -29,7 +29,6 @@ public:
 		char headersStr[MAX_BUFEER] = { '\0' };
 		int currentIndex = 0;
 		int headersIndexStart = 0, headersIndexEnd = 0;
-		char body[MAX_BUFEER] = { '\0' };
 		int requestLength = strlen(i_Request);
 
 		currentIndex += getRow(i_Request + currentIndex, row);
@@ -49,7 +48,7 @@ public:
 		headersIndexEnd = currentIndex;
 		strcpyByIndexes(i_Request, headersStr, headersIndexStart, headersIndexEnd);
 		request->m_Headers = Headers::Parse(headersStr);
-		strcpyByIndexes(i_Request, body, currentIndex, strlen(i_Request));
+		strcpyByIndexes(i_Request, request->m_Body, currentIndex, strlen(i_Request));
 		
 		return request;
 	}

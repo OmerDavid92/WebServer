@@ -294,7 +294,7 @@ void receiveMessage(int index)
 			char firstRequest[MAX_BUFEER] = { '\0' };
 			memcpy(firstRequest, sockets[index].buffer, indexOfEndFirstRequest);
 			memcpy(sockets[index].buffer, &sockets[index].buffer[indexOfEndFirstRequest + 1], indexOfEndFirstRequest + 1);
-			sockets[index].len -= indexOfEndFirstRequest;
+			sockets[index].len -= indexOfEndFirstRequest + 1;
 			sockets[index].send = SEND;
 
 			sockets[index].request = Request::Parse(firstRequest);
