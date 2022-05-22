@@ -108,7 +108,9 @@ static Response* HandleDelete(Request* i_Request) {
 	strcat(path, i_Request->m_URI);
 	ifstream file(path);
 
+
 	if (file.good()) {
+		file.close();
 		if (remove(path) == 0) {
 			response = new Response("200", "OK", i_Request->m_Version);
 		}

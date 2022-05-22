@@ -283,6 +283,7 @@ void receiveMessage(int index)
 	}
 	else
 	{
+		//start clock
 		sockets[index].buffer[len + bytesRecv] = '\0'; //add the null-terminating to make it a string
 		cout << "Time Server: Recieved: " << bytesRecv << " bytes of \"" << &sockets[index].buffer[len] << "\" message.\n";
 
